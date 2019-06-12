@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
-* Студент: [Игорь Басихин](https://up.htmlacademy.ru/javascript/17/user/973815).
-* Наставник: `Неизвестно`.
+* Студент: [Игорь Басихин](https://htmlacademy.ru/profile/id973815).
+* Наставник: [Артём Рудов](https://htmlacademy.ru/profile/id345377).
 
 ---
 
