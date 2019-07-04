@@ -2,9 +2,8 @@
 
 var OFFER_TYPES = ['palace', 'flat', 'house', 'bungalo'];
 var OFFER_TOTAL = 8;
-var PIN_WIDTH = 49.09;
-var PIN_X_MIN = PIN_WIDTH;
-var PIN_X_MAX = 1200 - PIN_WIDTH;
+var PIN_X_MIN = 50;
+var PIN_X_MAX = 1150;
 var PIN_Y_MIN = 130;
 var PIN_Y_MAX = 630;
 
@@ -14,8 +13,7 @@ var PIN_Y_MAX = 630;
  * @return {string}
  */
 var getRandElement = function (arr) {
-  var rand = Math.floor(Math.random() * arr.length);
-  return arr[rand];
+  return arr[Math.floor(Math.random() * arr.length)];
 };
 
 /**
@@ -29,45 +27,48 @@ var getRandMinMax = function (min, max) {
 };
 
 /**
- * Возвращает массив объектов с тестовыми данными объявлений, используя другие функции
+ * Возвращает объект с тестовыми данными объявления
+ * @param {number} count отвечает за номер фотографии в ссылке
+ * @return {object}
+ */
+var getAdword = function (count) {
+  return {
+    'author': {
+      'avatar': 'img/avatars/user0' + (count + 1) + '.png'
+    },
+    'offer': {
+      'type': getRandElement(OFFER_TYPES)
+    },
+    'location': {
+      'x': getRandMinMax(PIN_X_MIN, PIN_X_MAX),
+      'y': getRandMinMax(PIN_Y_MIN, PIN_Y_MAX)
+    }
+  };
+};
+
+/**
+ * Возвращает массив объектов с тестовыми данными объявлений
  * @param {number} count количество создаваемых объявлений
  * @return {array}
  */
 var getSimilarAds = function (count) {
   var similarAds = [];
 
-  for (var i = 1; i <= count; i++) {
-    var similarAd = {
-      'author': {
-        'avatar': 'img/avatars/user0' + i + '.png'
-      },
-      'offer': {
-        'type': getRandElement(OFFER_TYPES)
-      },
-      'location': {
-        'x': getRandMinMax(PIN_X_MIN, PIN_X_MAX),
-        'y': getRandMinMax(PIN_Y_MIN, PIN_Y_MAX)
-      }
-    };
-
-    similarAds.push(similarAd);
+  for (var i = 0; i < count; i++) {
+    similarAds.push(getAdword(i));
   }
 
   return similarAds;
 };
 
 var map = document.querySelector('.map');
-map.classList.remove('map--faded');
-
 var pinList = map.querySelector('.map__pins');
 var pinTemplate = document.querySelector('#pin')
     .content
     .querySelector('.map__pin');
 var pinFragment = document.createDocumentFragment();
 
-var similarAds = getSimilarAds(OFFER_TOTAL);
-
-similarAds.forEach(function (item) {
+getSimilarAds(OFFER_TOTAL).forEach(function (item) {
   var currentPin = item;
   var pinElement = pinTemplate.cloneNode(true);
 
@@ -79,3 +80,5 @@ similarAds.forEach(function (item) {
 });
 
 pinList.appendChild(pinFragment);
+
+map.classList.remove('map--faded');
