@@ -108,7 +108,22 @@ var setAdFormAddressCoordinates = function (coordinates) {
 };
 
 /**
- * Приводит страницу в "активное состояние". Блок карты и формы становятся доступными. На карте появляются "похожие" объявления (моки)
+ * При изменении значения селекта "Тип жилья", также меняет атрибуты min и placeholder у инпута цены в соотв. со словарем offerType
+ */
+var onOfferTypeChange = function () {
+  var selectedType = adFormOfferType.value;
+  var selectedTypeValues = offerType[selectedType];
+  var attributes = Object.keys(selectedTypeValues);
+
+  attributes.forEach(function (item) {
+    var attribute = item;
+    var value = selectedTypeValues[attribute];
+    adFormPrice.setAttribute(attribute, value);
+  });
+};
+
+/**
+ * Приводит страницу в "активное состояние". Блок карты и формы становятся доступными. На карте появляются "похожие" объявления (моки). Начинает работать дополнительная валидация форм
  */
 var onPinMainClick = function () {
   map.classList.remove('map--faded');
@@ -120,6 +135,7 @@ var onPinMainClick = function () {
   pinMainPositionY += (PIN_MAIN_WIDTH / 2 + PIN_MAIN_TIP);
   setAdFormAddressCoordinates(getPinMainCoordinates());
 
+  adFormOfferType.addEventListener('change', onOfferTypeChange);
   pinMain.removeEventListener('click', onPinMainClick);
 };
 
@@ -142,6 +158,8 @@ var pinMain = map.querySelector('.map__pin--main');
 var adForm = document.querySelector('.ad-form');
 var adFormFields = adForm.querySelectorAll('fieldset');
 var adFormAddress = adForm.querySelector('#address');
+var adFormOfferType = adForm.querySelector('#type');
+var adFormPrice = adForm.querySelector('#price');
 var filtersForm = document.querySelector('.map__filters');
 var filtersFormFields = filtersForm.querySelectorAll('select, fieldset');
 var pinMainPositionX = pinMain.offsetLeft + PIN_MAIN_WIDTH / 2;
