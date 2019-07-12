@@ -65,7 +65,7 @@ var getSimilarAds = function (count) {
 
 /**
  * Перебирает DOM коллекцию, активирует элементы, удаляя атрибут 'disabled'
- * @param {*} domCollection
+ * @param {domCollection} domCollection
  */
 var enableFormFields = function (domCollection) {
   domCollection.forEach(function (item) {
@@ -75,7 +75,7 @@ var enableFormFields = function (domCollection) {
 
 /**
  * Перебирает DOM коллекцию, деактивирует элементы, добавляя атрибут 'disabled'
- * @param {*} domCollection
+ * @param {domCollection} domCollection
  */
 var disableFormFields = function (domCollection) {
   domCollection.forEach(function (item) {
@@ -85,7 +85,6 @@ var disableFormFields = function (domCollection) {
 
 /**
  * Возвращает объект с координатами главного пина
- * @param {Boolean} isCenter true - координаты равны середине пина; false || отсутствие параметра - место, куда метка указывает своим острым концом
  * @return {object}
  */
 var getPinMainCoordinates = function () {
