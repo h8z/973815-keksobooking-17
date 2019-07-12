@@ -1,6 +1,11 @@
 'use strict';
 
-var OFFER_TYPES = ['palace', 'flat', 'house', 'bungalo'];
+var offerType = {
+  bungalo: {placeholder: 0, min: 0},
+  flat: {placeholder: 1000, min: 1000},
+  house: {placeholder: 5000, min: 5000},
+  palace: {placeholder: 10000, min: 10000}
+};
 var OFFER_TOTAL = 8;
 var PIN_X_MIN = 50;
 var PIN_X_MAX = 1150;
@@ -39,7 +44,7 @@ var getAdword = function (count) {
       'avatar': 'img/avatars/user0' + (count + 1) + '.png'
     },
     'offer': {
-      'type': getRandElement(OFFER_TYPES)
+      'type': getRandElement(Object.keys(offerType))
     },
     'location': {
       'x': getRandMinMax(PIN_X_MIN, PIN_X_MAX),
