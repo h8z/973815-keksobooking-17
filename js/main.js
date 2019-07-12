@@ -123,6 +123,16 @@ var onOfferTypeChange = function () {
 };
 
 /**
+ * При изменении значения одного из двух селектов времени, присваивает другому такое же
+ * @param {evt} evt
+ */
+var onTimeSelectChange = function (evt) {
+  var target = evt.target;
+
+  target === adFormTimeIn ? adFormTimeOut.value = target.value : adFormTimeIn.value = target.value;
+};
+
+/**
  * Приводит страницу в "активное состояние". Блок карты и формы становятся доступными. На карте появляются "похожие" объявления (моки). Начинает работать дополнительная валидация форм
  */
 var onPinMainClick = function () {
@@ -136,6 +146,8 @@ var onPinMainClick = function () {
   setAdFormAddressCoordinates(getPinMainCoordinates());
 
   adFormOfferType.addEventListener('change', onOfferTypeChange);
+  adFormTimeIn.addEventListener('change', onTimeSelectChange);
+  adFormTimeOut.addEventListener('change', onTimeSelectChange);
   pinMain.removeEventListener('click', onPinMainClick);
 };
 
@@ -160,6 +172,8 @@ var adFormFields = adForm.querySelectorAll('fieldset');
 var adFormAddress = adForm.querySelector('#address');
 var adFormOfferType = adForm.querySelector('#type');
 var adFormPrice = adForm.querySelector('#price');
+var adFormTimeIn = adForm.querySelector('#timein');
+var adFormTimeOut = adForm.querySelector('#timeout');
 var filtersForm = document.querySelector('.map__filters');
 var filtersFormFields = filtersForm.querySelectorAll('select, fieldset');
 var pinMainPositionX = pinMain.offsetLeft + PIN_MAIN_WIDTH / 2;
