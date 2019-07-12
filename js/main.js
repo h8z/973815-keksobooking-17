@@ -129,7 +129,11 @@ var onOfferTypeChange = function () {
 var onTimeSelectChange = function (evt) {
   var target = evt.target;
 
-  target === adFormTimeIn ? adFormTimeOut.value = target.value : adFormTimeIn.value = target.value;
+  if (target === adFormTimeIn) {
+    adFormTimeOut.value = target.value;
+  } else {
+    adFormTimeIn.value = target.value;
+  }
 };
 
 /**
