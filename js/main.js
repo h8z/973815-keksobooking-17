@@ -1,10 +1,10 @@
 'use strict';
 
 var offerType = {
-  bungalo: {placeholder: 0, min: 0},
-  flat: {placeholder: 1000, min: 1000},
-  house: {placeholder: 5000, min: 5000},
-  palace: {placeholder: 10000, min: 10000}
+  bungalo: {minPrice: 0},
+  flat: {minPrice: 1000},
+  house: {minPrice: 5000},
+  palace: {minPrice: 10000}
 };
 var OFFER_TOTAL = 8;
 var PIN_X_MIN = 50;
@@ -111,15 +111,8 @@ var setAdFormAddressCoordinates = function (coordinates) {
  * При изменении значения селекта "Тип жилья", также меняет атрибуты min и placeholder у инпута цены в соотв. со словарем offerType
  */
 var onOfferTypeChange = function () {
-  var selectedType = adFormOfferType.value;
-  var selectedTypeValues = offerType[selectedType];
-  var attributes = Object.keys(selectedTypeValues);
-
-  attributes.forEach(function (item) {
-    var attribute = item;
-    var value = selectedTypeValues[attribute];
-    adFormPrice.setAttribute(attribute, value);
-  });
+  adFormPrice.min = offerType[adFormOfferType.value].minPrice;
+  adFormPrice.placeholder = offerType[adFormOfferType.value].minPrice;
 };
 
 /**
@@ -142,6 +135,8 @@ var onTimeSelectChange = function (evt) {
 var onPinMainClick = function () {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
+  adFormPrice.min = offerType['flat'].minPrice;
+  adFormPrice.placeholder = offerType['flat'].minPrice;
   enableFormFields(adFormFields);
   enableFormFields(filtersFormFields);
   pinList.appendChild(pinFragment);
