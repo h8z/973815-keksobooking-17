@@ -1,6 +1,11 @@
 'use strict';
 
-var OFFER_TYPES = ['palace', 'flat', 'house', 'bungalo'];
+var offerType = {
+  bungalo: {minPrice: 0},
+  flat: {minPrice: 1000},
+  house: {minPrice: 5000},
+  palace: {minPrice: 10000}
+};
 var OFFER_TOTAL = 8;
 var PIN_X_MIN = 50;
 var PIN_X_MAX = 1150;
@@ -39,7 +44,7 @@ var getAdword = function (count) {
       'avatar': 'img/avatars/user0' + (count + 1) + '.png'
     },
     'offer': {
-      'type': getRandElement(OFFER_TYPES)
+      'type': getRandElement(Object.keys(offerType))
     },
     'location': {
       'x': getRandMinMax(PIN_X_MIN, PIN_X_MAX),
@@ -65,7 +70,7 @@ var getSimilarAds = function (count) {
 
 /**
  * Перебирает DOM коллекцию, активирует элементы, удаляя атрибут 'disabled'
- * @param {*} domCollection
+ * @param {domCollection} domCollection
  */
 var enableFormFields = function (domCollection) {
   domCollection.forEach(function (item) {
@@ -75,7 +80,7 @@ var enableFormFields = function (domCollection) {
 
 /**
  * Перебирает DOM коллекцию, деактивирует элементы, добавляя атрибут 'disabled'
- * @param {*} domCollection
+ * @param {domCollection} domCollection
  */
 var disableFormFields = function (domCollection) {
   domCollection.forEach(function (item) {
@@ -85,7 +90,6 @@ var disableFormFields = function (domCollection) {
 
 /**
  * Возвращает объект с координатами главного пина
- * @param {Boolean} isCenter true - координаты равны середине пина; false || отсутствие параметра - место, куда метка указывает своим острым концом
  * @return {object}
  */
 var getPinMainCoordinates = function () {
@@ -104,11 +108,35 @@ var setAdFormAddressCoordinates = function (coordinates) {
 };
 
 /**
- * Приводит страницу в "активное состояние". Блок карты и формы становятся доступными. На карте появляются "похожие" объявления (моки)
+ * При изменении значения селекта "Тип жилья", также меняет атрибуты min и placeholder у инпута цены в соотв. со словарем offerType
+ */
+var onOfferTypeChange = function () {
+  adFormPrice.min = offerType[adFormOfferType.value].minPrice;
+  adFormPrice.placeholder = offerType[adFormOfferType.value].minPrice;
+};
+
+/**
+ * При изменении значения одного из двух селектов времени, присваивает другому такое же
+ * @param {evt} evt
+ */
+var onTimeSelectChange = function (evt) {
+  var target = evt.target;
+
+  if (target === adFormTimeIn) {
+    adFormTimeOut.value = target.value;
+  } else {
+    adFormTimeIn.value = target.value;
+  }
+};
+
+/**
+ * Приводит страницу в "активное состояние". Блок карты и формы становятся доступными. На карте появляются "похожие" объявления (моки). Начинает работать дополнительная валидация форм
  */
 var onPinMainClick = function () {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
+  adFormPrice.min = offerType['flat'].minPrice;
+  adFormPrice.placeholder = offerType['flat'].minPrice;
   enableFormFields(adFormFields);
   enableFormFields(filtersFormFields);
   pinList.appendChild(pinFragment);
@@ -116,6 +144,9 @@ var onPinMainClick = function () {
   pinMainPositionY += (PIN_MAIN_WIDTH / 2 + PIN_MAIN_TIP);
   setAdFormAddressCoordinates(getPinMainCoordinates());
 
+  adFormOfferType.addEventListener('change', onOfferTypeChange);
+  adFormTimeIn.addEventListener('change', onTimeSelectChange);
+  adFormTimeOut.addEventListener('change', onTimeSelectChange);
   pinMain.removeEventListener('click', onPinMainClick);
 };
 
@@ -138,6 +169,10 @@ var pinMain = map.querySelector('.map__pin--main');
 var adForm = document.querySelector('.ad-form');
 var adFormFields = adForm.querySelectorAll('fieldset');
 var adFormAddress = adForm.querySelector('#address');
+var adFormOfferType = adForm.querySelector('#type');
+var adFormPrice = adForm.querySelector('#price');
+var adFormTimeIn = adForm.querySelector('#timein');
+var adFormTimeOut = adForm.querySelector('#timeout');
 var filtersForm = document.querySelector('.map__filters');
 var filtersFormFields = filtersForm.querySelectorAll('select, fieldset');
 var pinMainPositionX = pinMain.offsetLeft + PIN_MAIN_WIDTH / 2;
