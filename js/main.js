@@ -158,56 +158,57 @@ var disablePage = function () {
 };
 
 /**
- * Обработчик drag-and-drop для центрального маркера. Позволяет пермещать его мышью не заходя за пределы карты, вызывает функции активации страницы и записи конечных коорд. в инпут адреса
- * @param {evt} downEvt
+ * Записывает координаты центрального маркера в переменную, активирует обработчики перемещения мыши и отжатия клавиши
+ * @param {evt} evt
  */
-var onPinMouseDown = function (downEvt) {
-  downEvt.preventDefault();
+var onPinMouseDown = function (evt) {
+  evt.preventDefault();
 
-  var startCoords = {
-    x: downEvt.clientX,
-    y: downEvt.clientY
-  };
-
-  var onPinMouseMove = function (moveEvt) {
-    moveEvt.preventDefault();
-
-    var shift = {
-      x: startCoords.x - moveEvt.clientX,
-      y: startCoords.y - moveEvt.clientY
-    };
-
-    startCoords = {
-      x: moveEvt.clientX,
-      y: moveEvt.clientY
-    };
-
-    pinMain.style.top = (pinMain.offsetTop - shift.y) + 'px';
-    pinMain.style.left = (pinMain.offsetLeft - shift.x) + 'px';
-
-    if (pinMain.offsetTop - shift.y < PIN_Y_MIN) {
-      pinMain.style.top = PIN_Y_MIN + 'px';
-    } else if (pinMain.offsetTop - shift.y > PIN_Y_MAX) {
-      pinMain.style.top = PIN_Y_MAX + 'px';
-    } else if (pinMain.offsetLeft - shift.x < PIN_X_MIN) {
-      pinMain.style.left = PIN_X_MIN;
-    } else if (pinMain.offsetLeft - shift.x > PIN_X_MAX) {
-      pinMain.style.left = PIN_X_MAX + 'px';
-    }
-
-    setAdFormAddressCoordinates(getPinMainCoordinates(true));
-  };
-
-  var onPinMouseUp = function (upEvt) {
-    upEvt.preventDefault();
-
-    document.removeEventListener('mousemove', onPinMouseMove);
-    document.removeEventListener('mouseup', onPinMouseUp);
-    enablePage();
-  };
+  startCoords.x = evt.clientX;
+  startCoords.y = evt.clientY;
 
   document.addEventListener('mousemove', onPinMouseMove);
   document.addEventListener('mouseup', onPinMouseUp);
+};
+
+/**
+ * Расчитывает и записывает координаты перемещения. Проверяет чтобы маркер не оказался на пределами карты. Записывет итоговые координаты в инпут адреса формы
+ * @param {evt} evt
+ */
+var onPinMouseMove = function (evt) {
+  evt.preventDefault();
+
+  shiftCoords.x = startCoords.x - evt.clientX;
+  shiftCoords.y = startCoords.y - evt.clientY;
+  startCoords.x = evt.clientX;
+  startCoords.y = evt.clientY;
+
+  pinMain.style.top = (pinMain.offsetTop - shiftCoords.y) + 'px';
+  pinMain.style.left = (pinMain.offsetLeft - shiftCoords.x) + 'px';
+
+  if (pinMain.offsetTop - shiftCoords.y < PIN_Y_MIN) {
+    pinMain.style.top = PIN_Y_MIN + 'px';
+  } else if (pinMain.offsetTop - shiftCoords.y > PIN_Y_MAX) {
+    pinMain.style.top = PIN_Y_MAX + 'px';
+  } else if (pinMain.offsetLeft - shiftCoords.x < PIN_X_MIN) {
+    pinMain.style.left = PIN_X_MIN;
+  } else if (pinMain.offsetLeft - shiftCoords.x > PIN_X_MAX) {
+    pinMain.style.left = PIN_X_MAX + 'px';
+  }
+
+  setAdFormAddressCoordinates(getPinMainCoordinates(true));
+};
+
+/**
+ * Завершает цикл перемещения маркера по карте, запускает активацию страницы
+ * @param {evt} evt
+ */
+var onPinMouseUp = function (evt) {
+  evt.preventDefault();
+
+  document.removeEventListener('mousemove', onPinMouseMove);
+  document.removeEventListener('mouseup', onPinMouseUp);
+  enablePage();
 };
 
 var map = document.querySelector('.map');
@@ -224,6 +225,8 @@ var adFormTimeIn = adForm.querySelector('#timein');
 var adFormTimeOut = adForm.querySelector('#timeout');
 var filtersForm = document.querySelector('.map__filters');
 var filtersFormFields = filtersForm.querySelectorAll('select, fieldset');
+var startCoords = {x: 0, y: 0};
+var shiftCoords = {x: 0, y: 0};
 
 getSimilarAds(OFFER_TOTAL).forEach(function (item) {
   var currentPin = item;
