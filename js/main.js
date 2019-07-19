@@ -1,18 +1,19 @@
 'use strict';
 
+var OFFER_TOTAL = 8;
+var PIN_X_MIN = 0;
+var PIN_X_MAX = 1138;
+var PIN_Y_MIN = 130;
+var PIN_Y_MAX = 630;
+var PIN_MAIN_WIDTH = 62;
+var PIN_MAIN_TIP = 22;
+
 var offerType = {
   bungalo: {minPrice: 0},
   flat: {minPrice: 1000},
   house: {minPrice: 5000},
   palace: {minPrice: 10000}
 };
-var OFFER_TOTAL = 8;
-var PIN_X_MIN = 50;
-var PIN_X_MAX = 1150;
-var PIN_Y_MIN = 130;
-var PIN_Y_MAX = 630;
-var PIN_MAIN_WIDTH = 62;
-var PIN_MAIN_TIP = 22;
 
 /**
  * Возвращает случайный элемент массива
@@ -90,13 +91,14 @@ var disableFormFields = function (domCollection) {
 
 /**
  * Возвращает объект с координатами главного пина
+ * @param {Boolean} isCenter true - координаты равны середине пина; false || отсутствие параметра - место, куда метка указывает своим острым концом
  * @return {object}
  */
-var getPinMainCoordinates = function () {
-  return {
-    x: pinMainPositionX,
-    y: pinMainPositionY
-  };
+var getPinMainCoordinates = function (isCenter) {
+  var pinMainPositionX = pinMain.offsetLeft + PIN_MAIN_WIDTH / 2;
+  var pinMainPositionY = pinMain.offsetTop + PIN_MAIN_WIDTH / 2;
+
+  return isCenter ? {x: pinMainPositionX, y: pinMainPositionY + PIN_MAIN_TIP} : {x: pinMainPositionX, y: pinMainPositionY};
 };
 
 /**
@@ -132,7 +134,7 @@ var onTimeSelectChange = function (evt) {
 /**
  * Приводит страницу в "активное состояние". Блок карты и формы становятся доступными. На карте появляются "похожие" объявления (моки). Начинает работать дополнительная валидация форм
  */
-var onPinMainClick = function () {
+var enablePage = function () {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   adFormPrice.min = offerType['flat'].minPrice;
@@ -141,13 +143,9 @@ var onPinMainClick = function () {
   enableFormFields(filtersFormFields);
   pinList.appendChild(pinFragment);
 
-  pinMainPositionY += (PIN_MAIN_WIDTH / 2 + PIN_MAIN_TIP);
-  setAdFormAddressCoordinates(getPinMainCoordinates());
-
   adFormOfferType.addEventListener('change', onOfferTypeChange);
   adFormTimeIn.addEventListener('change', onTimeSelectChange);
   adFormTimeOut.addEventListener('change', onTimeSelectChange);
-  pinMain.removeEventListener('click', onPinMainClick);
 };
 
 /**
@@ -157,8 +155,60 @@ var disablePage = function () {
   setAdFormAddressCoordinates(getPinMainCoordinates());
   disableFormFields(adFormFields);
   disableFormFields(filtersFormFields);
+};
 
-  pinMain.addEventListener('click', onPinMainClick);
+/**
+ * Записывает координаты центрального маркера в переменную, активирует обработчики перемещения мыши и отжатия клавиши
+ * @param {evt} evt
+ */
+var onPinMouseDown = function (evt) {
+  evt.preventDefault();
+
+  startCoords.x = evt.clientX;
+  startCoords.y = evt.clientY;
+
+  document.addEventListener('mousemove', onPinMouseMove);
+  document.addEventListener('mouseup', onPinMouseUp);
+};
+
+/**
+ * Расчитывает и записывает координаты перемещения. Проверяет чтобы маркер не оказался на пределами карты. Записывет итоговые координаты в инпут адреса формы
+ * @param {evt} evt
+ */
+var onPinMouseMove = function (evt) {
+  evt.preventDefault();
+
+  shiftCoords.x = startCoords.x - evt.clientX;
+  shiftCoords.y = startCoords.y - evt.clientY;
+  startCoords.x = evt.clientX;
+  startCoords.y = evt.clientY;
+
+  pinMain.style.top = (pinMain.offsetTop - shiftCoords.y) + 'px';
+  pinMain.style.left = (pinMain.offsetLeft - shiftCoords.x) + 'px';
+
+  if (pinMain.offsetTop - shiftCoords.y < PIN_Y_MIN) {
+    pinMain.style.top = PIN_Y_MIN + 'px';
+  } else if (pinMain.offsetTop - shiftCoords.y > PIN_Y_MAX) {
+    pinMain.style.top = PIN_Y_MAX + 'px';
+  } else if (pinMain.offsetLeft - shiftCoords.x < PIN_X_MIN) {
+    pinMain.style.left = PIN_X_MIN;
+  } else if (pinMain.offsetLeft - shiftCoords.x > PIN_X_MAX) {
+    pinMain.style.left = PIN_X_MAX + 'px';
+  }
+
+  setAdFormAddressCoordinates(getPinMainCoordinates(true));
+};
+
+/**
+ * Завершает цикл перемещения маркера по карте, запускает активацию страницы
+ * @param {evt} evt
+ */
+var onPinMouseUp = function (evt) {
+  evt.preventDefault();
+
+  document.removeEventListener('mousemove', onPinMouseMove);
+  document.removeEventListener('mouseup', onPinMouseUp);
+  enablePage();
 };
 
 var map = document.querySelector('.map');
@@ -175,8 +225,8 @@ var adFormTimeIn = adForm.querySelector('#timein');
 var adFormTimeOut = adForm.querySelector('#timeout');
 var filtersForm = document.querySelector('.map__filters');
 var filtersFormFields = filtersForm.querySelectorAll('select, fieldset');
-var pinMainPositionX = pinMain.offsetLeft + PIN_MAIN_WIDTH / 2;
-var pinMainPositionY = pinMain.offsetTop + PIN_MAIN_WIDTH / 2;
+var startCoords = {x: 0, y: 0};
+var shiftCoords = {x: 0, y: 0};
 
 getSimilarAds(OFFER_TOTAL).forEach(function (item) {
   var currentPin = item;
@@ -189,3 +239,5 @@ getSimilarAds(OFFER_TOTAL).forEach(function (item) {
 });
 
 disablePage();
+
+pinMain.addEventListener('mousedown', onPinMouseDown);
