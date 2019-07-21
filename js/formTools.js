@@ -28,10 +28,10 @@
   var onTimeSelectChange = function (evt) {
     var target = evt.target;
 
-    if (target === window.elements.adFormTimeIn) {
-      window.elements.adFormTimeOut.value = target.value;
+    if (target === adForm.timeIn) {
+      adForm.timeOut.value = target.value;
     } else {
-      window.elements.adFormTimeIn.value = target.value;
+      adForm.timeIn.value = target.value;
     }
   };
 
@@ -44,20 +44,21 @@
   };
 
   /**
-   * При изменении значения селекта "Тип жилья", также меняет атрибуты min и placeholder у инпута цены в соотв. со словарем offerType
+   * При изменении значения селекта "Тип жилья", также меняет атрибуты min и placeholder у инпута цены в соотв. со словарем houseType (модуль constants.js)
    */
   var onOfferTypeChange = function () {
-    window.elements.adFormPrice.min = window.constants.offerType[window.elements.adFormOfferType.value].minPrice;
-    window.elements.adFormPrice.placeholder = window.constants.offerType[window.elements.adFormOfferType.value].minPrice;
+    adForm.price.min = window.constants.houseType[adForm.offerType.value];
+    adForm.price.placeholder = window.constants.houseType[adForm.offerType.value];
   };
 
-  var adFormAddress = window.elements.adForm.querySelector('#address');
+  var adForm = window.elements.adForm;
+  var adFormAddress = adForm.form.querySelector('#address');
 
-  window.form = {
-    setAdFormAddressCoordinates: setAdFormAddressCoordinates,
-    enableFormFields: enableFormFields,
-    disableFormFields: disableFormFields,
-    onOfferTypeChange: onOfferTypeChange,
-    onTimeSelectChange: onTimeSelectChange
+  window.formTools = {
+    setCoordinates: setAdFormAddressCoordinates,
+    enableFields: enableFormFields,
+    disableFields: disableFormFields,
+    onTypeChange: onOfferTypeChange,
+    onTimeChange: onTimeSelectChange
   };
 })();

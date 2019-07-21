@@ -45,17 +45,17 @@
     pinMain.style.top = (pinMain.offsetTop - shiftCoords.y) + 'px';
     pinMain.style.left = (pinMain.offsetLeft - shiftCoords.x) + 'px';
 
-    if (pinMain.offsetTop - shiftCoords.y < window.constants.PIN_Y_MIN) {
-      pinMain.style.top = window.constants.PIN_Y_MIN + 'px';
-    } else if (pinMain.offsetTop - shiftCoords.y > window.constants.PIN_Y_MAX) {
-      pinMain.style.top = window.constants.PIN_Y_MAX + 'px';
-    } else if (pinMain.offsetLeft - shiftCoords.x < window.constants.PIN_X_MIN) {
-      pinMain.style.left = window.constants.PIN_X_MIN;
-    } else if (pinMain.offsetLeft - shiftCoords.x > window.constants.PIN_X_MAX) {
-      pinMain.style.left = window.constants.PIN_X_MAX + 'px';
+    if (pinMain.offsetTop - shiftCoords.y < mapConfig.PIN_Y_MIN) {
+      pinMain.style.top = mapConfig.PIN_Y_MIN + 'px';
+    } else if (pinMain.offsetTop - shiftCoords.y > mapConfig.PIN_Y_MAX) {
+      pinMain.style.top = mapConfig.PIN_Y_MAX + 'px';
+    } else if (pinMain.offsetLeft - shiftCoords.x < mapConfig.PIN_X_MIN) {
+      pinMain.style.left = mapConfig.PIN_X_MIN;
+    } else if (pinMain.offsetLeft - shiftCoords.x > mapConfig.PIN_X_MAX) {
+      pinMain.style.left = mapConfig.PIN_X_MAX + 'px';
     }
 
-    window.form.setAdFormAddressCoordinates(getPinMainCoordinates(true));
+    window.formTools.setCoordinates(getPinMainCoordinates(true));
   };
 
   /**
@@ -67,15 +67,16 @@
 
     document.removeEventListener('mousemove', onPinMouseMove);
     document.removeEventListener('mouseup', onPinMouseUp);
-    window.map.enablePage();
+    window.enablePage();
   };
 
+  var mapConfig = window.constants.mapConfig;
   var pinMain = window.elements.map.querySelector('.map__pin--main');
   var startCoords = {x: 0, y: 0};
   var shiftCoords = {x: 0, y: 0};
 
   window.pin = {
-    getPinMainCoordinates: getPinMainCoordinates,
-    onPinMouseDown: onPinMouseDown
+    getCoordinates: getPinMainCoordinates,
+    onMouseDown: onPinMouseDown
   };
 })();

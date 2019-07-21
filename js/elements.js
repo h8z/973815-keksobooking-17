@@ -8,16 +8,16 @@
   var adFormOfferType = adForm.querySelector('#type');
   var adFormTimeIn = adForm.querySelector('#timein');
   var adFormTimeOut = adForm.querySelector('#timeout');
-  var filtersForm = document.querySelector('.map__filters');
 
   window.elements = {
     map: map,
-    adForm: adForm,
-    adFormFields: adFormFields,
-    adFormPrice: adFormPrice,
-    adFormOfferType: adFormOfferType,
-    adFormTimeIn: adFormTimeIn,
-    adFormTimeOut: adFormTimeOut,
-    filtersForm: filtersForm
+    adForm: {
+      form: adForm,
+      fields: adFormFields,
+      price: adFormPrice,
+      offerType: adFormOfferType,
+      timeIn: adFormTimeIn,
+      timeOut: adFormTimeOut
+    }
   };
 })();

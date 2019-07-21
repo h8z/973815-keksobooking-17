@@ -14,11 +14,11 @@
         'avatar': 'img/avatars/user0' + (count + 1) + '.png'
       },
       'offer': {
-        'type': window.utils.getRandElement(Object.keys(window.constants.offerType))
+        'type': utils.getRandElement(Object.keys(window.constants.houseType))
       },
       'location': {
-        'x': window.utils.getRandMinMax(window.constants.PIN_X_MIN, window.constants.PIN_X_MAX),
-        'y': window.utils.getRandMinMax(window.constants.PIN_Y_MIN, window.constants.PIN_Y_MAX)
+        'x': utils.getRandMinMax(mapConfig.PIN_X_MIN, mapConfig.PIN_X_MAX),
+        'y': utils.getRandMinMax(mapConfig.PIN_Y_MIN, mapConfig.PIN_Y_MAX)
       }
     };
   };
@@ -38,6 +38,8 @@
     return similarAds;
   };
 
+  var mapConfig = window.constants.mapConfig;
+  var utils = window.utils;
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var pinFragment = document.createDocumentFragment();
 
@@ -51,7 +53,5 @@
     pinFragment.appendChild(pinElement);
   });
 
-  window.mocks = {
-    pinFragment: pinFragment
-  };
+  window.pinFragment = pinFragment;
 })();
