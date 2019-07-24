@@ -37,7 +37,7 @@
 
   /**
    * Наполняет карту маркерами других предложений
-   * @param {array} offers
+   * @param {array} data
    */
   var getOffers = function (data) {
     var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
@@ -54,7 +54,7 @@
     });
 
     pinList.appendChild(pinFragment);
-  }
+  };
 
   disablePage();
 
