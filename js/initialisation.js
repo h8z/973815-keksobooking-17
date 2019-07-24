@@ -2,7 +2,7 @@
 
 (function () {
   /**
-   * Приводит страницу в "активное состояние". Блок карты и формы становятся доступными. На карте появляются "похожие" объявления (моки). Начинает работать дополнительная валидация форм
+   * Приводит страницу в "активное состояние". Блок карты и формы становятся доступными. На карте появляются другие объявления. Начинает работать дополнительная валидация форм
    */
   var enablePage = function () {
     map.classList.remove('map--faded');
@@ -11,7 +11,7 @@
     adForm.price.placeholder = window.constants.houseType['flat'];
     formTools.enableFields(adForm.fields);
     formTools.enableFields(filtersFormFields);
-    pinList.appendChild(window.pinFragment);
+    window.backend.getRequest(getOffers, window.backend.renderError);
 
     adForm.offerType.addEventListener('change', formTools.onTypeChange);
     adForm.timeIn.addEventListener('change', formTools.onTimeChange);
@@ -34,6 +34,27 @@
   var pinList = map.querySelector('.map__pins');
   var filtersForm = document.querySelector('.map__filters');
   var filtersFormFields = filtersForm.querySelectorAll('select, fieldset');
+
+  /**
+   * Наполняет карту маркерами других предложений
+   * @param {array} offers
+   */
+  var getOffers = function (data) {
+    var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+    var pinFragment = document.createDocumentFragment();
+
+    data.forEach(function (item) {
+      var currentPin = item;
+      var pinElement = pinTemplate.cloneNode(true);
+
+      pinElement.style.left = currentPin.location.x + 'px';
+      pinElement.style.top = currentPin.location.y + 'px';
+      pinElement.querySelector('img').src = currentPin.author.avatar;
+      pinFragment.appendChild(pinElement);
+    });
+
+    pinList.appendChild(pinFragment);
+  }
 
   disablePage();
 
