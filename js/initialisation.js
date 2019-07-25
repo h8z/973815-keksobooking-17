@@ -11,7 +11,7 @@
     adForm.price.placeholder = window.constants.houseType['flat'];
     formTools.enableFields(adForm.fields);
     formTools.enableFields(filtersFormFields);
-    window.backend.getRequest(getOffers, window.backend.renderError);
+    window.backend.save(getOffers, onError);
 
     adForm.offerType.addEventListener('change', formTools.onTypeChange);
     adForm.timeIn.addEventListener('change', formTools.onTimeChange);
@@ -56,9 +56,33 @@
     pinList.appendChild(pinFragment);
   };
 
+    /**
+   * Рендерит попап при ошибке отправки формы/получения данных с сервера
+   */
+  var onError = function () {
+    var errorPopup = errorTemplate.cloneNode(true);
+    pageMain.appendChild(errorPopup);
+  };
+
+  /**
+   * Рендерит попап при успешной отправке формы
+   */
+  var onSuccess = function () {
+    var successPopup = successTemplate.cloneNode(true);
+    pageMain.appendChild(successPopup);
+  };
+
+  var pageMain = document.querySelector('main');
+  var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+  var successTemplate = document.querySelector('#success').content.querySelector('.success');
+
   disablePage();
 
   pinMain.addEventListener('mousedown', window.pin.onMouseDown);
 
-  window.enablePage = enablePage;
+  window.initialisation = {
+    init : enablePage,
+    error : onError,
+    success : onSuccess
+  };
 })();

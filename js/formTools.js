@@ -56,7 +56,7 @@
 
   adForm.form.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.postRequest(null, window.backend.onSuccess, window.backend.onError);
+    window.backend.load(null, window.initialisation.success, window.initialisation.error);
   });
 
   window.formTools = {

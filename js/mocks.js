@@ -14,11 +14,11 @@
         'avatar': 'img/avatars/user0' + (count + 1) + '.png'
       },
       'offer': {
-        'type': utils.getRandElement(Object.keys(window.constants.houseType))
+        'type': utils.randElement(Object.keys(window.constants.houseType))
       },
       'location': {
-        'x': utils.getRandMinMax(mapConfig.PIN_X_MIN, mapConfig.PIN_X_MAX),
-        'y': utils.getRandMinMax(mapConfig.PIN_Y_MIN, mapConfig.PIN_Y_MAX)
+        'x': utils.randMinMax(mapConfig.PIN_X_MIN, mapConfig.PIN_X_MAX),
+        'y': utils.randMinMax(mapConfig.PIN_Y_MIN, mapConfig.PIN_Y_MAX)
       }
     };
   };

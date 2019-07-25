@@ -21,7 +21,7 @@
   };
 
   window.utils = {
-    getRandElement: getRandElement,
-    getRandMinMax: getRandMinMax
+    randElement: getRandElement,
+    randMinMax: getRandMinMax
   };
 })();
