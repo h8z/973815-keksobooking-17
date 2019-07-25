@@ -81,8 +81,8 @@
   pinMain.addEventListener('mousedown', window.pin.onMouseDown);
 
   window.initialisation = {
-    init : enablePage,
-    error : onError,
-    success : onSuccess
+    init: enablePage,
+    error: onError,
+    success: onSuccess
   };
 })();
