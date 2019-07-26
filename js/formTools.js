@@ -54,6 +54,11 @@
   var adForm = window.elements.adForm;
   var adFormAddress = adForm.form.querySelector('#address');
 
+  adForm.form.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.backend.load(null, window.initialisation.success, window.initialisation.error);
+  });
+
   window.formTools = {
     setCoordinates: setAdFormAddressCoordinates,
     enableFields: enableFormFields,

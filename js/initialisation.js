@@ -2,7 +2,7 @@
 
 (function () {
   /**
-   * Приводит страницу в "активное состояние". Блок карты и формы становятся доступными. На карте появляются "похожие" объявления (моки). Начинает работать дополнительная валидация форм
+   * Приводит страницу в "активное состояние". Блок карты и формы становятся доступными. На карте появляются другие объявления. Начинает работать дополнительная валидация форм
    */
   var enablePage = function () {
     map.classList.remove('map--faded');
@@ -11,7 +11,7 @@
     adForm.price.placeholder = window.constants.houseType['flat'];
     formTools.enableFields(adForm.fields);
     formTools.enableFields(filtersFormFields);
-    pinList.appendChild(window.pinFragment);
+    window.backend.save(getOffers, onError);
 
     adForm.offerType.addEventListener('change', formTools.onTypeChange);
     adForm.timeIn.addEventListener('change', formTools.onTimeChange);
@@ -35,9 +35,54 @@
   var filtersForm = document.querySelector('.map__filters');
   var filtersFormFields = filtersForm.querySelectorAll('select, fieldset');
 
+  /**
+   * Наполняет карту маркерами других предложений
+   * @param {array} data
+   */
+  var getOffers = function (data) {
+    var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+    var pinFragment = document.createDocumentFragment();
+
+    data.forEach(function (item) {
+      var currentPin = item;
+      var pinElement = pinTemplate.cloneNode(true);
+
+      pinElement.style.left = currentPin.location.x + 'px';
+      pinElement.style.top = currentPin.location.y + 'px';
+      pinElement.querySelector('img').src = currentPin.author.avatar;
+      pinFragment.appendChild(pinElement);
+    });
+
+    pinList.appendChild(pinFragment);
+  };
+
+    /**
+   * Рендерит попап при ошибке отправки формы/получения данных с сервера
+   */
+  var onError = function () {
+    var errorPopup = errorTemplate.cloneNode(true);
+    pageMain.appendChild(errorPopup);
+  };
+
+  /**
+   * Рендерит попап при успешной отправке формы
+   */
+  var onSuccess = function () {
+    var successPopup = successTemplate.cloneNode(true);
+    pageMain.appendChild(successPopup);
+  };
+
+  var pageMain = document.querySelector('main');
+  var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+  var successTemplate = document.querySelector('#success').content.querySelector('.success');
+
   disablePage();
 
   pinMain.addEventListener('mousedown', window.pin.onMouseDown);
 
-  window.enablePage = enablePage;
+  window.initialisation = {
+    init: enablePage,
+    error: onError,
+    success: onSuccess
+  };
 })();
