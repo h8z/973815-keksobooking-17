@@ -11,7 +11,7 @@
     adForm.price.placeholder = window.constants.houseType['flat'];
     formTools.enableFields(adForm.fields);
     formTools.enableFields(filtersFormFields);
-    window.backend.save(getOffers, onError);
+    window.backend.save(renderOffers, onError);
 
     adForm.offerType.addEventListener('change', formTools.onTypeChange);
     adForm.timeIn.addEventListener('change', formTools.onTimeChange);
@@ -28,27 +28,36 @@
   };
 
   /**
-   * Наполняет карту маркерами других предложений
+   * Возвращает склонированный темплейт маркера предложения, заполняя его прокинутыми через параметр данными
+   * @param {object} offer
+   * @return {HTMLButtonElement}
+   */
+  var getOffers = function (offer) {
+    var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+    var pinElement = pinTemplate.cloneNode(true);
+
+    pinElement.style.left = offer.location.x + 'px';
+    pinElement.style.top = offer.location.y + 'px';
+    pinElement.querySelector('img').src = offer.author.avatar;
+
+    return pinElement;
+  };
+
+  /**
+   * Добавляет на карту 5 маркеров предложений, используя фрагмент
    * @param {array} data
    */
-  var getOffers = function (data) {
-    var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+  var renderOffers = function (data) {
     var pinFragment = document.createDocumentFragment();
 
-    data.forEach(function (item) {
-      var currentPin = item;
-      var pinElement = pinTemplate.cloneNode(true);
-
-      pinElement.style.left = currentPin.location.x + 'px';
-      pinElement.style.top = currentPin.location.y + 'px';
-      pinElement.querySelector('img').src = currentPin.author.avatar;
-      pinFragment.appendChild(pinElement);
+    data.slice(0, 5).forEach(function (item) {
+      pinFragment.appendChild(getOffers(item));
     });
 
     pinList.appendChild(pinFragment);
   };
 
-    /**
+  /**
    * Рендерит попап при ошибке отправки формы/получения данных с сервера
    */
   var onError = function () {
