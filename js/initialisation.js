@@ -10,8 +10,8 @@
     adForm.price.min = window.constants.houseType['flat'];
     adForm.price.placeholder = window.constants.houseType['flat'];
     formTools.enableFields(adForm.fields);
-    formTools.enableFields(filtersFormFields);
-    window.backend.save(renderOffers, onError);
+    formTools.enableFields(filtersFields);
+    window.backend.save(onSaveSuccess, onError);
 
     adForm.offerType.addEventListener('change', formTools.onTypeChange);
     adForm.timeIn.addEventListener('change', formTools.onTimeChange);
@@ -24,7 +24,7 @@
   var disablePage = function () {
     formTools.setCoordinates(window.pin.getCoordinates());
     formTools.disableFields(adForm.fields);
-    formTools.disableFields(filtersFormFields);
+    formTools.disableFields(filtersFields);
   };
 
   /**
@@ -69,7 +69,16 @@
   };
 
   /**
-   * Рендерит попап при ошибке отправки формы/получения данных с сервера
+   * Создает копию данных с сервера и вызывает рендеринг пинов при успешной загрузке данных
+   * @param {array} data
+   */
+  var onSaveSuccess = function (data) {
+    serverData = data;
+    renderOffers(serverData);
+  };
+
+  /**
+   * Рендерит попап при ошибке отправки формы
    */
   var onError = function () {
     var errorPopup = errorTemplate.cloneNode(true);
@@ -93,7 +102,8 @@
   var pinList = map.querySelector('.map__pins');
   var pinMain = pinList.querySelector('.map__pin--main');
   var filtersForm = document.querySelector('.map__filters');
-  var filtersFormFields = filtersForm.querySelectorAll('select, fieldset');
+  var filtersFields = filtersForm.querySelectorAll('select, fieldset');
+  var serverData = [];
 
   disablePage();
 
