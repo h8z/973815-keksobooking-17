@@ -58,6 +58,17 @@
   };
 
   /**
+   * Удаляет все маркеры предложений на карте из исключением главного
+   */
+  var clearOffers = function () {
+    var pins = pinList.querySelectorAll('.map__pin:not(.map__pin--main)');
+
+    pins.forEach(function (pin) {
+      pin.remove();
+    });
+  };
+
+  /**
    * Рендерит попап при ошибке отправки формы/получения данных с сервера
    */
   var onError = function () {
