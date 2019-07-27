@@ -16,6 +16,7 @@
     adForm.offerType.addEventListener('change', formTools.onTypeChange);
     adForm.timeIn.addEventListener('change', formTools.onTimeChange);
     adForm.timeOut.addEventListener('change', formTools.onTimeChange);
+    filtersForm.addEventListener('change', OnFiltersChange);
   };
 
   /**
@@ -66,6 +67,16 @@
     pins.forEach(function (pin) {
       pin.remove();
     });
+  };
+
+  /**
+   * Обновляет маркеры предложений на карте, при изменении значений фильтров
+   */
+  var OnFiltersChange = function () {
+    var updatedData = serverData.filter(window.filters.type);
+
+    clearOffers();
+    renderOffers(updatedData);
   };
 
   /**
