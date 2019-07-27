@@ -27,14 +27,6 @@
     formTools.disableFields(filtersFormFields);
   };
 
-  var adForm = window.elements.adForm;
-  var map = window.elements.map;
-  var formTools = window.formTools;
-  var pinMain = map.querySelector('.map__pin--main');
-  var pinList = map.querySelector('.map__pins');
-  var filtersForm = document.querySelector('.map__filters');
-  var filtersFormFields = filtersForm.querySelectorAll('select, fieldset');
-
   /**
    * Наполняет карту маркерами других предложений
    * @param {array} data
@@ -72,9 +64,16 @@
     pageMain.appendChild(successPopup);
   };
 
+  var adForm = window.elements.adForm;
+  var map = window.elements.map;
+  var formTools = window.formTools;
   var pageMain = document.querySelector('main');
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
   var successTemplate = document.querySelector('#success').content.querySelector('.success');
+  var pinList = map.querySelector('.map__pins');
+  var pinMain = pinList.querySelector('.map__pin--main');
+  var filtersForm = document.querySelector('.map__filters');
+  var filtersFormFields = filtersForm.querySelectorAll('select, fieldset');
 
   disablePage();
 
