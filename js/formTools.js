@@ -51,12 +51,33 @@
     adForm.price.placeholder = window.constants.houseType[adForm.offerType.value];
   };
 
+  /**
+   * Рендерит попап при ошибке отправки формы
+   */
+  var onError = function () {
+    var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+    var errorPopup = errorTemplate.cloneNode(true);
+
+    pageMain.appendChild(errorPopup);
+  };
+
+  /**
+   * Рендерит попап при успешной отправке формы
+   */
+  var onSuccess = function () {
+    var successTemplate = document.querySelector('#success').content.querySelector('.success');
+    var successPopup = successTemplate.cloneNode(true);
+
+    pageMain.appendChild(successPopup);
+  };
+
   var adForm = window.elements.adForm;
   var adFormAddress = adForm.form.querySelector('#address');
+  var pageMain = document.querySelector('main');
 
   adForm.form.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.load(null, window.initialisation.success, window.initialisation.error);
+    window.backend.load(null, onSuccess, onError);
   });
 
   window.formTools = {
@@ -64,6 +85,7 @@
     enableFields: enableFormFields,
     disableFields: disableFormFields,
     onTypeChange: onOfferTypeChange,
-    onTimeChange: onTimeSelectChange
+    onTimeChange: onTimeSelectChange,
+    error: onError
   };
 })();
