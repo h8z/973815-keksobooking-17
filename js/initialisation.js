@@ -29,7 +29,5 @@
 
   disablePage();
 
-  window.initialisation = {
-    init: enablePage
-  };
+  window.startApp = enablePage;
 })();

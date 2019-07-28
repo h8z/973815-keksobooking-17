@@ -67,7 +67,7 @@
 
     document.removeEventListener('mousemove', onPinMouseMove);
     document.removeEventListener('mouseup', onPinMouseUp);
-    window.initialisation.init();
+    window.startApp();
   };
 
   var mapConfig = window.constants.mapConfig;

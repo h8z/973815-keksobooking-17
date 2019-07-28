@@ -45,7 +45,7 @@
   /**
    * Обновляет маркеры предложений на карте, при изменении значений фильтров
    */
-  var OnFilterChange = function () {
+  var updateOffers = function () {
     var updatedData = serverData.filter(window.filters.type);
 
     clearOffers();
@@ -58,7 +58,7 @@
    */
   var onSaveSuccess = function (data) {
     serverData = data;
-    renderOffers(serverData);
+    updateOffers(serverData);
   };
 
   var map = window.elements.map;
@@ -67,7 +67,6 @@
 
   window.offers = {
     save: onSaveSuccess,
-    update: OnFilterChange
+    update: updateOffers
   };
-
 })();
