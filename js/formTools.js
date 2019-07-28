@@ -75,10 +75,16 @@
   var adFormAddress = adForm.form.querySelector('#address');
   var pageMain = document.querySelector('main');
 
+  adForm.price.min = window.constants.houseType['flat'];
+  adForm.price.placeholder = window.constants.houseType['flat'];
+
   adForm.form.addEventListener('submit', function (evt) {
     evt.preventDefault();
     window.backend.load(null, onSuccess, onError);
   });
+  adForm.offerType.addEventListener('change', onOfferTypeChange);
+  adForm.timeIn.addEventListener('change', onTimeSelectChange);
+  adForm.timeOut.addEventListener('change', onTimeSelectChange);
 
   window.formTools = {
     setCoordinates: setAdFormAddressCoordinates,

@@ -75,8 +75,9 @@
   var startCoords = {x: 0, y: 0};
   var shiftCoords = {x: 0, y: 0};
 
+  pinMain.addEventListener('mousedown', onPinMouseDown);
+
   window.pin = {
-    getCoordinates: getPinMainCoordinates,
-    onMouseDown: onPinMouseDown
+    getCoordinates: getPinMainCoordinates
   };
 })();
