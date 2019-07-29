@@ -1,6 +1,13 @@
 'use strict';
 
 (function () {
+  var HousePrice = {
+    bungalo: 0,
+    flat: 1000,
+    house: 5000,
+    palace: 10000
+  };
+
   /**
    * Перебирает DOM коллекцию, активирует элементы, удаляя атрибут 'disabled'
    * @param {domCollection} domCollection
@@ -47,8 +54,8 @@
    * При изменении значения селекта "Тип жилья", также меняет атрибуты min и placeholder у инпута цены в соотв. со словарем houseType (модуль constants.js)
    */
   var onOfferTypeChange = function () {
-    adForm.price.min = window.constants.houseType[adForm.offerType.value];
-    adForm.price.placeholder = window.constants.houseType[adForm.offerType.value];
+    adForm.price.min = HousePrice[adForm.offerType.value];
+    adForm.price.placeholder = HousePrice[adForm.offerType.value];
   };
 
   /**
@@ -75,8 +82,8 @@
   var adFormAddress = adForm.form.querySelector('#address');
   var pageMain = document.querySelector('main');
 
-  adForm.price.min = window.constants.houseType['flat'];
-  adForm.price.placeholder = window.constants.houseType['flat'];
+  adForm.price.min = HousePrice['flat'];
+  adForm.price.placeholder = HousePrice['flat'];
 
   adForm.form.addEventListener('submit', function (evt) {
     evt.preventDefault();
