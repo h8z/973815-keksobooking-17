@@ -55,12 +55,13 @@
   };
 
   /**
-   * Создает копию данных с сервера и вызывает рендеринг пинов при успешной загрузке данных
+   * Создает копию данных с сервера и вызывает рендеринг пинов и карточек предложений при успешной загрузке данных
    * @param {array} data
    */
   var onSaveSuccess = function (data) {
     serverData = data;
     updateOffers(serverData);
+    window.renderCards(serverData);
   };
 
   var map = window.elements.map;
