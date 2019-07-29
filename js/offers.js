@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var OFFERS_TOTAL = 5;
+
   /**
    * Возвращает склонированный темплейт маркера предложения, заполняя его прокинутыми через параметр данными
    * @param {object} offer
@@ -24,7 +26,7 @@
   var renderOffers = function (data) {
     var pinFragment = document.createDocumentFragment();
 
-    data.slice(0, 5).forEach(function (item) {
+    data.slice(0, OFFERS_TOTAL).forEach(function (item) {
       pinFragment.appendChild(getOffers(item));
     });
 
