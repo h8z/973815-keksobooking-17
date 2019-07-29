@@ -51,19 +51,47 @@
     adForm.price.placeholder = window.constants.houseType[adForm.offerType.value];
   };
 
+  /**
+   * Рендерит попап при ошибке отправки формы
+   */
+  var onError = function () {
+    var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+    var errorPopup = errorTemplate.cloneNode(true);
+
+    pageMain.appendChild(errorPopup);
+  };
+
+  /**
+   * Рендерит попап при успешной отправке формы
+   */
+  var onSuccess = function () {
+    var successTemplate = document.querySelector('#success').content.querySelector('.success');
+    var successPopup = successTemplate.cloneNode(true);
+
+    pageMain.appendChild(successPopup);
+  };
+
   var adForm = window.elements.adForm;
   var adFormAddress = adForm.form.querySelector('#address');
+  var pageMain = document.querySelector('main');
+
+  adForm.price.min = window.constants.houseType['flat'];
+  adForm.price.placeholder = window.constants.houseType['flat'];
 
   adForm.form.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.load(null, window.initialisation.success, window.initialisation.error);
+    window.backend.load(null, onSuccess, onError);
   });
+  adForm.offerType.addEventListener('change', onOfferTypeChange);
+  adForm.timeIn.addEventListener('change', onTimeSelectChange);
+  adForm.timeOut.addEventListener('change', onTimeSelectChange);
 
   window.formTools = {
     setCoordinates: setAdFormAddressCoordinates,
     enableFields: enableFormFields,
     disableFields: disableFormFields,
     onTypeChange: onOfferTypeChange,
-    onTimeChange: onTimeSelectChange
+    onTimeChange: onTimeSelectChange,
+    error: onError
   };
 })();
