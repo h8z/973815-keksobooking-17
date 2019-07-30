@@ -99,7 +99,7 @@
       activePin.classList.remove('map__pin--active');
       document.removeEventListener('keydown', onCardEscPress);
     }
-  }
+  };
 
   var map = window.elements.map;
   var filtersContainer = map.querySelector('.map__filters-container');
@@ -107,5 +107,5 @@
   window.cards = {
     render: renderCard,
     close: closeCard
-  }
+  };
 })();
