@@ -16,6 +16,11 @@
     pinElement.style.top = offer.location.y + 'px';
     pinElement.querySelector('img').src = offer.author.avatar;
 
+    pinElement.addEventListener('click', function () {
+      window.cards.render(offer);
+      pinElement.classList.add('map__pin--active');
+    });
+
     return pinElement;
   };
 
@@ -61,7 +66,6 @@
   var onSaveSuccess = function (data) {
     serverData = data;
     updateOffers(serverData);
-    window.renderCards(serverData);
   };
 
   var map = window.elements.map;
