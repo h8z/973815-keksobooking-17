@@ -40,10 +40,6 @@
   var getCardFeatures = function (card, data) {
     var features = card.querySelector('.popup__features');
 
-    while (features.firstChild) {
-      features.removeChild(features.firstChild);
-    }
-
     data.forEach(function (type) {
       var feature = document.createElement('li');
 
