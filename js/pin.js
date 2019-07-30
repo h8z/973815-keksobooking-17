@@ -1,8 +1,14 @@
 'use strict';
 
 (function () {
-  var PIN_MAIN_WIDTH = 62;
-  var PIN_MAIN_TIP = 22;
+  var PinConfig = {
+    WIDTH: 62,
+    TIP: 22,
+    X_MIN: 0,
+    X_MAX: 1138,
+    Y_MIN: 130,
+    Y_MAX: 630
+  };
 
   /**
    * Возвращает объект с координатами главного пина
@@ -10,10 +16,10 @@
    * @return {object}
    */
   var getPinMainCoordinates = function (isCenter) {
-    var pinMainPositionX = pinMain.offsetLeft + PIN_MAIN_WIDTH / 2;
-    var pinMainPositionY = pinMain.offsetTop + PIN_MAIN_WIDTH / 2;
+    var pinMainPositionX = pinMain.offsetLeft + PinConfig.WIDTH / 2;
+    var pinMainPositionY = pinMain.offsetTop + PinConfig.WIDTH / 2;
 
-    return isCenter ? {x: pinMainPositionX, y: pinMainPositionY + PIN_MAIN_TIP} : {x: pinMainPositionX, y: pinMainPositionY};
+    return isCenter ? {x: pinMainPositionX, y: pinMainPositionY + PinConfig.TIP} : {x: pinMainPositionX, y: pinMainPositionY};
   };
 
   /**
@@ -45,14 +51,14 @@
     pinMain.style.top = (pinMain.offsetTop - shiftCoords.y) + 'px';
     pinMain.style.left = (pinMain.offsetLeft - shiftCoords.x) + 'px';
 
-    if (pinMain.offsetTop - shiftCoords.y < mapConfig.PIN_Y_MIN) {
-      pinMain.style.top = mapConfig.PIN_Y_MIN + 'px';
-    } else if (pinMain.offsetTop - shiftCoords.y > mapConfig.PIN_Y_MAX) {
-      pinMain.style.top = mapConfig.PIN_Y_MAX + 'px';
-    } else if (pinMain.offsetLeft - shiftCoords.x < mapConfig.PIN_X_MIN) {
-      pinMain.style.left = mapConfig.PIN_X_MIN;
-    } else if (pinMain.offsetLeft - shiftCoords.x > mapConfig.PIN_X_MAX) {
-      pinMain.style.left = mapConfig.PIN_X_MAX + 'px';
+    if (pinMain.offsetTop - shiftCoords.y < PinConfig.Y_MIN) {
+      pinMain.style.top = PinConfig.Y_MIN + 'px';
+    } else if (pinMain.offsetTop - shiftCoords.y > PinConfig.Y_MAX) {
+      pinMain.style.top = PinConfig.Y_MAX + 'px';
+    } else if (pinMain.offsetLeft - shiftCoords.x < PinConfig.X_MIN) {
+      pinMain.style.left = PinConfig.X_MIN;
+    } else if (pinMain.offsetLeft - shiftCoords.x > PinConfig.X_MAX) {
+      pinMain.style.left = PinConfig.X_MAX + 'px';
     }
 
     window.formTools.setCoordinates(getPinMainCoordinates(true));
@@ -70,7 +76,6 @@
     window.startApp();
   };
 
-  var mapConfig = window.constants.mapConfig;
   var pinMain = window.elements.map.querySelector('.map__pin--main');
   var startCoords = {x: 0, y: 0};
   var shiftCoords = {x: 0, y: 0};
