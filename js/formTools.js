@@ -7,6 +7,12 @@
     house: 5000,
     palace: 10000
   };
+  var CapacityMap = {
+    '1': [1],
+    '2': [2, 1],
+    '3': [3, 2, 1],
+    '100': [0]
+  };
 
   /**
    * Перебирает DOM коллекцию, активирует элементы, удаляя атрибут 'disabled'
@@ -78,12 +84,43 @@
     pageMain.appendChild(successPopup);
   };
 
+  /**
+   * Перебирает DOM коллекцию, добавляя класс 'hidden'
+   * @param {domCollection} options
+   */
+  var removeOptions = function (options) {
+    options.forEach(function (item) {
+      item.setAttribute('class', 'hidden');
+    });
+  };
+
+  /**
+   * Обновляет класс 'hidden' у опций селекта кол-ва мест, в зависимости от селекта кол-ва комнат. Для работы использует мапу
+   */
+  var onRoomsChange = function () {
+    var roomsCurrentValue = CapacityMap[rooms.value];
+
+    removeOptions(capacityOptions);
+
+    capacityOptions.forEach(function (item) {
+      if (roomsCurrentValue.includes(parseInt(item.value, 10))) {
+        item.classList.remove('hidden');
+      }
+    });
+    capacity.value = CapacityMap[rooms.value][0];
+  };
+
+  var pageMain = document.querySelector('main');
   var adForm = window.elements.adForm;
   var adFormAddress = adForm.form.querySelector('#address');
-  var pageMain = document.querySelector('main');
+  var rooms = adForm.form.querySelector('#room_number');
+  var capacity = adForm.form.querySelector('#capacity');
+  var capacityOptions = capacity.querySelectorAll('option');
 
   adForm.price.min = HousePrice['flat'];
   adForm.price.placeholder = HousePrice['flat'];
+
+  removeOptions(capacityOptions);
 
   adForm.form.addEventListener('submit', function (evt) {
     evt.preventDefault();
@@ -92,6 +129,7 @@
   adForm.offerType.addEventListener('change', onOfferTypeChange);
   adForm.timeIn.addEventListener('change', onTimeSelectChange);
   adForm.timeOut.addEventListener('change', onTimeSelectChange);
+  rooms.addEventListener('change', onRoomsChange);
 
   window.formTools = {
     setCoordinates: setAdFormAddressCoordinates,
