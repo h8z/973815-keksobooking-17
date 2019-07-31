@@ -7,6 +7,7 @@
     house: 'Дом',
     bungalo: 'Бунгало'
   };
+  var ESC_KEYCODE = 27;
 
   /**
    * Возвращает склонированный темплейт карточки предложения
@@ -25,9 +26,12 @@
     cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
     cardElement.querySelector('.popup__description').textContent = data.offer.description;
     cardElement.querySelector('.popup__avatar').src = data.author.avatar;
+    cardElement.querySelector('.popup__close').addEventListener('click', closeCard);
 
     getCardPhotos(cardElement, data.offer.photos);
     getCardFeatures(cardElement, data.offer.features);
+
+    document.addEventListener('keydown', onCardEscPress);
 
     return cardElement;
   };
@@ -39,10 +43,6 @@
    */
   var getCardFeatures = function (card, data) {
     var features = card.querySelector('.popup__features');
-
-    while (features.firstChild) {
-      features.removeChild(features.firstChild);
-    }
 
     data.forEach(function (type) {
       var feature = document.createElement('li');
@@ -70,22 +70,42 @@
     photoCollection.removeChild(photoCollection.children[0]);
   };
 
+  var onCardEscPress = function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      closeCard();
+    }
+  };
+
   /**
-   * Рендерит карторчки в блок карты, использует фрагмент
-   * @param {array} data массив объектов с сервера
+   * Запускает ф-цию удаления текущей карточки и рендерит новую
+   * @param {array} data
    */
-  var renderCards = function (data) {
-    var cardFragment = document.createDocumentFragment();
+  var renderCard = function (data) {
+    closeCard();
 
-    data.slice(0, 1).forEach(function (card) { // slice временно для отображения лишь одной карточки
-      cardFragment.appendChild(getCard(card));
-    });
+    map.insertBefore(getCard(data), filtersContainer);
+  };
 
-    map.insertBefore(cardFragment, filtersContainer);
+  /**
+   * Проверяет открыта ли хотя бы 1 карточка, если да - удаляет ее а также модификатор --active класса пина, которым она была открыта
+   */
+  var closeCard = function () {
+    var openedCard = map.querySelector('.map__card');
+
+    if (openedCard) {
+      var activePin = map.querySelector('.map__pin--active');
+
+      openedCard.remove();
+      activePin.classList.remove('map__pin--active');
+      document.removeEventListener('keydown', onCardEscPress);
+    }
   };
 
   var map = window.elements.map;
   var filtersContainer = map.querySelector('.map__filters-container');
 
-  window.renderCards = renderCards;
+  window.cards = {
+    render: renderCard,
+    close: closeCard
+  };
 })();
