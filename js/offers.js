@@ -52,12 +52,12 @@
   /**
    * Обновляет маркеры предложений на карте, при изменении значений фильтров
    */
-  var updateOffers = function () {
+  var updateOffers = window.debounce(function () {
     var updatedData = serverData.filter(window.filters.all);
 
     clearOffers();
     renderOffers(updatedData);
-  };
+  });
 
   /**
    * Создает копию данных с сервера и вызывает рендеринг пинов и карточек предложений при успешной загрузке данных
@@ -65,7 +65,7 @@
    */
   var onSaveSuccess = function (data) {
     serverData = data;
-    updateOffers(serverData);
+    updateOffers();
   };
 
   var map = window.elements.map;
