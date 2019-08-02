@@ -1,11 +1,13 @@
 'use strict';
 
 (function () {
+  var ESC_KEYCODE = 27;
+
   var HousePrice = {
-    bungalo: 0,
-    flat: 1000,
-    house: 5000,
-    palace: 10000
+    BUNGALO: 0,
+    FLAT: 1000,
+    HOUSE: 5000,
+    PALACE: 10000
   };
   var CapacityMap = {
     '1': [1],
@@ -13,7 +15,6 @@
     '3': [3, 2, 1],
     '100': [0]
   };
-  var ESC_KEYCODE = 27;
 
   /**
    * Перебирает DOM коллекцию, активирует элементы, удаляя атрибут 'disabled'
@@ -58,11 +59,11 @@
   };
 
   /**
-   * При изменении значения селекта "Тип жилья", также меняет атрибуты min и placeholder у инпута цены в соотв. со словарем houseType (модуль constants.js)
+   * При изменении значения селекта "Тип жилья", также меняет атрибуты min и placeholder у инпута цены в соотв. с HousePrice
    */
   var onOfferTypeChange = function () {
-    adForm.price.min = HousePrice[adForm.offerType.value];
-    adForm.price.placeholder = HousePrice[adForm.offerType.value];
+    adForm.price.min = HousePrice[adForm.offerType.value.toUpperCase()];
+    adForm.price.placeholder = HousePrice[adForm.offerType.value.toUpperCase()];
   };
 
   /**
