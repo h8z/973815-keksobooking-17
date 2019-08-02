@@ -53,7 +53,7 @@
    * Обновляет маркеры предложений на карте, при изменении значений фильтров
    */
   var updateOffers = function () {
-    var updatedData = serverData.filter(window.filters.type);
+    var updatedData = serverData.filter(window.filters.all);
 
     clearOffers();
     renderOffers(updatedData);
