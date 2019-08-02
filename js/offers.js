@@ -74,6 +74,7 @@
 
   window.offers = {
     save: onSaveSuccess,
-    update: updateOffers
+    update: updateOffers,
+    clear: clearOffers
   };
 })();

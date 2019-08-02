@@ -7,7 +7,9 @@
     X_MIN: 0,
     X_MAX: 1138,
     Y_MIN: 130,
-    Y_MAX: 630
+    Y_MAX: 630,
+    X_DEFAULT: 570,
+    Y_DEFAULT: 375
   };
 
   /**
@@ -20,6 +22,14 @@
     var pinMainPositionY = pinMain.offsetTop + PinConfig.WIDTH / 2;
 
     return isCenter ? {x: pinMainPositionX, y: pinMainPositionY + PinConfig.TIP} : {x: pinMainPositionX, y: pinMainPositionY};
+  };
+
+  /**
+   * Перемещает главный пин на исходное положение
+   */
+  var resetPinMainCoordinates = function () {
+    pinMain.style.left = PinConfig.X_DEFAULT + 'px';
+    pinMain.style.top = PinConfig.Y_DEFAULT + 'px';
   };
 
   /**
@@ -73,7 +83,7 @@
 
     document.removeEventListener('mousemove', onPinMouseMove);
     document.removeEventListener('mouseup', onPinMouseUp);
-    window.startApp();
+    window.initialisation.enable();
   };
 
   var pinMain = window.elements.map.querySelector('.map__pin--main');
@@ -83,6 +93,7 @@
   pinMain.addEventListener('mousedown', onPinMouseDown);
 
   window.pin = {
-    getCoordinates: getPinMainCoordinates
+    getCoordinates: getPinMainCoordinates,
+    resetCoordinates: resetPinMainCoordinates
   };
 })();
