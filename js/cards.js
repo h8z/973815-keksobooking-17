@@ -91,13 +91,15 @@
    */
   var closeCard = function () {
     var openedCard = map.querySelector('.map__card');
+    var activePin = map.querySelector('.map__pin--active');
 
     if (openedCard) {
-      var activePin = map.querySelector('.map__pin--active');
-
       openedCard.remove();
-      activePin.classList.remove('map__pin--active');
       document.removeEventListener('keydown', onCardEscPress);
+    }
+
+    if (activePin) {
+      activePin.classList.remove('map__pin--active');
     }
   };
 

@@ -37,8 +37,7 @@
   var map = window.elements.map;
   var adForm = window.elements.adForm;
   var formTools = window.formTools;
-  var filtersForm = document.querySelector('.map__filters');
-  var filtersFields = filtersForm.querySelectorAll('select, fieldset');
+  var filtersFields = window.filters.form.querySelectorAll('select, fieldset');
 
   disablePage();
 
