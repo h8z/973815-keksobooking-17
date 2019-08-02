@@ -13,6 +13,7 @@
     '3': [3, 2, 1],
     '100': [0]
   };
+  var ESC_KEYCODE = 27;
 
   /**
    * Перебирает DOM коллекцию, активирует элементы, удаляя атрибут 'disabled'
@@ -65,23 +66,56 @@
   };
 
   /**
-   * Рендерит попап при ошибке отправки формы
+   * Рендерит попап при ошибке отправки формы, добавляет обработчики закрытия этого попапа
    */
   var onError = function () {
     var errorTemplate = document.querySelector('#error').content.querySelector('.error');
     var errorPopup = errorTemplate.cloneNode(true);
 
     pageMain.appendChild(errorPopup);
+    document.addEventListener('click', onPopupClick);
+    document.addEventListener('keydown', onPopupEscPress);
   };
 
   /**
-   * Рендерит попап при успешной отправке формы
+   * Рендерит попап при успешной отправке формы, запускает цепочку функций, которые приводят страницу к исходному состоянию. Добавляет обработчики закрытия этого попапа
    */
   var onSuccess = function () {
     var successTemplate = document.querySelector('#success').content.querySelector('.success');
     var successPopup = successTemplate.cloneNode(true);
 
     pageMain.appendChild(successPopup);
+    document.addEventListener('click', onPopupClick);
+    document.addEventListener('keydown', onPopupEscPress);
+
+    adForm.form.reset();
+    window.initialisation.reset();
+    onOfferTypeChange();
+    removeOptions(capacityOptions);
+  };
+
+  /**
+   * Ищет все открытые попапы, удаляет их + обработчики
+   */
+  var onPopupClick = function () {
+    var popups = pageMain.querySelectorAll('.error, .success');
+
+    popups.forEach(function (popup) {
+      popup.remove();
+    });
+
+    document.removeEventListener('click', onPopupClick);
+    document.removeEventListener('keydown', onPopupEscPress);
+  };
+
+  /**
+   * Вызывает ф-цию закрытия попапа, если нажат Esc
+   * @param {evt} evt
+   */
+  var onPopupEscPress = function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      onPopupClick();
+    }
   };
 
   /**
@@ -117,14 +151,12 @@
   var capacity = adForm.form.querySelector('#capacity');
   var capacityOptions = capacity.querySelectorAll('option');
 
-  adForm.price.min = HousePrice['flat'];
-  adForm.price.placeholder = HousePrice['flat'];
-
   removeOptions(capacityOptions);
+  onOfferTypeChange();
 
   adForm.form.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.load(null, onSuccess, onError);
+    window.backend.load(new FormData(adForm.form), onSuccess, onError);
   });
   adForm.offerType.addEventListener('change', onOfferTypeChange);
   adForm.timeIn.addEventListener('change', onTimeSelectChange);
