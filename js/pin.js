@@ -3,11 +3,11 @@
 (function () {
   var PinConfig = {
     WIDTH: 62,
-    TIP: 22,
+    TIP: 18,
     X_MIN: 0,
     X_MAX: 1138,
-    Y_MIN: 130,
-    Y_MAX: 630,
+    Y_MIN: 50,
+    Y_MAX: 550,
     X_DEFAULT: 570,
     Y_DEFAULT: 375
   };
@@ -20,8 +20,9 @@
   var getPinMainCoordinates = function (isCenter) {
     var pinMainPositionX = pinMain.offsetLeft + PinConfig.WIDTH / 2;
     var pinMainPositionY = pinMain.offsetTop + PinConfig.WIDTH / 2;
+    var pinMainPositionYtip = pinMain.offsetTop + PinConfig.WIDTH + PinConfig.TIP;
 
-    return isCenter ? {x: pinMainPositionX, y: pinMainPositionY + PinConfig.TIP} : {x: pinMainPositionX, y: pinMainPositionY};
+    return isCenter ? {x: pinMainPositionX, y: pinMainPositionY} : {x: pinMainPositionX, y: pinMainPositionYtip};
   };
 
   /**
@@ -71,7 +72,7 @@
       pinMain.style.left = PinConfig.X_MAX + 'px';
     }
 
-    window.formTools.setCoordinates(getPinMainCoordinates(true));
+    window.formTools.setCoordinates(getPinMainCoordinates());
   };
 
   /**

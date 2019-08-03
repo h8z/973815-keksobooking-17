@@ -49,9 +49,8 @@
         price = 'high';
       }
       return priceSelect.value === price;
-    } else {
-      return item;
     }
+    return item;
   };
 
   /**

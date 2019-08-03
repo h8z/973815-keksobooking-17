@@ -55,6 +55,7 @@
   var updateOffers = window.debounce(function () {
     var updatedData = serverData.filter(window.filters.all);
 
+    window.cards.close();
     clearOffers();
     renderOffers(updatedData);
   });
