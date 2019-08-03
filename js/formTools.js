@@ -89,6 +89,13 @@
     document.addEventListener('click', onPopupClick);
     document.addEventListener('keydown', onPopupEscPress);
 
+    onResetButtonClick();
+  };
+
+  /**
+   * Сбрасывает страницу в исходное неактивное состояние
+   */
+  var onResetButtonClick = function () {
     adForm.form.reset();
     window.initialisation.reset();
     onOfferTypeChange();
@@ -151,6 +158,7 @@
   var rooms = adForm.form.querySelector('#room_number');
   var capacity = adForm.form.querySelector('#capacity');
   var capacityOptions = capacity.querySelectorAll('option');
+  var resetButton = adForm.form.querySelector('.ad-form__reset');
 
   removeOptions(capacityOptions);
   onOfferTypeChange();
@@ -163,6 +171,7 @@
   adForm.timeIn.addEventListener('change', onTimeSelectChange);
   adForm.timeOut.addEventListener('change', onTimeSelectChange);
   rooms.addEventListener('change', onRoomsChange);
+  resetButton.addEventListener('click', onResetButtonClick);
 
   window.formTools = {
     setCoordinates: setAdFormAddressCoordinates,

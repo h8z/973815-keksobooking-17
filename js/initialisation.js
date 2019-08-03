@@ -16,7 +16,7 @@
    * Делает все формы страницы неактивными, записывает начальные координаты главного пина, равные ее центру
    */
   var disablePage = function () {
-    formTools.setCoordinates(window.pin.getCoordinates());
+    formTools.setCoordinates(window.pin.getCoordinates(true));
     formTools.disableFields(adForm.fields);
     formTools.disableFields(filtersFields);
   };
